@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, app
 from flask_cors import CORS
 
 from src.blueprints import register_blueprints
 from src.config import initconfig
 from src.data import store
+from pathlib import Path
 
 
 def create_app():
@@ -11,7 +12,7 @@ def create_app():
 
     CORS(app, resources={r"/*": {"origins": "*"}})
     initconfig(app)
-    store.path = app.config["DATA_FILE"]
+    store.path = Path(app.config["DATA_FILE"]).resolve()
     store.ensure()
     register_blueprints(app)
 
